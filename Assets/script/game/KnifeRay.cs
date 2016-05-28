@@ -1,78 +1,69 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class KnifeRay : MonoBehaviour {
+public class KnifeRay : MonoBehaviour
+{
+    public GameObject myRay;      // 刀光的prefab
 
-    //选择颜色
-    //public Color mycolor;
-
-    public GameObject myRay;  //这个是刀光的prefab
-
+    // 刀光的位置
     private Vector3 firstPosition;
     private Vector3 secondPosition;
-    private Vector3 middlePosition;
-
-    private bool isClicked = false;
-
-    private LineRenderer lineRenderer;
+    public Vector3 rayPosition;
 
     private GameObject rayGameObject;
 
-     //Use this for initialization
-        //void Start () {
-        //    lineRenderer = gameObject.AddComponent<LineRenderer>();//添加一个划线的组件
-        //    //设置颜色和宽度
-        //    lineRenderer.material.color = mycolor;
-        //    lineRenderer.SetWidth(0.1f, 0.1f);
-        //}
+    // 水果被切脚本
+    HitByKnife hitByKnife;
+
+    void Start()
+    {
+        hitByKnife = GameObject.Find("Fruit").GetComponent<HitByKnife>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-
-        bool isMouseDown = Input.GetMouseButton(0);//判断鼠标是否左击
-
-        if (isMouseDown && !isClicked)
+        // 鼠标按下
+        if (Input.GetMouseButtonDown(0))
         {
             //屏幕坐标转化成空间坐标
-            firstPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
-
-            //lineRenderer.SetVertexCount(1);
-
-            //lineRenderer.enabled = true;
-            //lineRenderer.SetPosition(0, firstPosition);
-
-            isClicked = true;
+            firstPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -2));
         }
 
-        else if (isMouseDown)
-        {
-            secondPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
-
-            //lineRenderer.SetVertexCount(2);
-
-            //lineRenderer.SetPosition(1, secondPosition);
-        }
-
-        //鼠标提起
+        // 鼠标提起
         if (Input.GetMouseButtonUp(0))
         {
-            isClicked = false;
+            secondPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -2));
 
-            secondPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
+            if (!hitByKnife.isHited)
+            {
+                rayPosition = (firstPosition + secondPosition) / 2;
+            }
+            
+            float angle = 0;
 
-            //lineRenderer.SetVertexCount(2);
+            // 计算刀光倾斜的角度
+            if (secondPosition.x != firstPosition.x)
+            {
+                angle = Mathf.Atan((secondPosition.y - firstPosition.y) / (secondPosition.x - firstPosition.x));
+            }
+            else
+            {
+                angle = Mathf.PI / 2;
+            }
 
-            //lineRenderer.SetPosition(1, secondPosition);
+            // 创建刀光
+            rayGameObject = Instantiate(myRay, rayPosition, Quaternion.AngleAxis(angle * 180 / Mathf.PI, Vector3.forward)) as GameObject;
 
+            // 如果水果被切，创建被切的水果
+            if (hitByKnife.isHited)
+            {
+                hitByKnife.SliceFruit();
+                hitByKnife.isHited = false;
+            }
 
-            middlePosition = (firstPosition + secondPosition) / 2;
-
-            float angle = Mathf.Atan((secondPosition.y - firstPosition.y) / (secondPosition.x - firstPosition.x));
-            //创建划痕,这里旋转的是幅度
-            rayGameObject = Instantiate(myRay, middlePosition, Quaternion.AngleAxis(angle * 180 / Mathf.PI, Vector3.forward)) as GameObject;
-
-            Destroy(rayGameObject, 1.0f);//一秒钟就去掉
+            // 一秒后销毁刀光
+            Destroy(rayGameObject, 1.0f);
         }
     }
 }
