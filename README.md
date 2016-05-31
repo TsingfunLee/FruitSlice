@@ -1,4 +1,4 @@
-﻿c# FruitSlice
+﻿# FruitSlice
 # 切水果游戏
 ## 简述
 根据龚老师的教程做的Unity游戏，在教程的基础上做了一些改进。
