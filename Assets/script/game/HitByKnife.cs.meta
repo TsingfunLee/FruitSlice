@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 39e7485615bec174daabc91a33ac207d
-timeCreated: 1464417528
+timeCreated: 1464656937
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - fruitSliced1: {instanceID: 0}
+  - fruitSliced2: {instanceID: 0}
+  - Xred: {instanceID: 0}
+  - xDisPlay: {fileID: 11435408, guid: d530b8e6818d76749810101cdf828ead, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

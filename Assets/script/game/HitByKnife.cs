@@ -10,16 +10,32 @@ public class HitByKnife : MonoBehaviour
     GameObject fruitSlicedObj1;
     GameObject fruitSlicedObj2;
 
+    // fallSound audio
+    AudioClip fallSound;
+
     // 刀光脚本
     KnifeRay knifeRay;
 
     // 是否被切
-    [HideInInspector] public bool isHited = false;
+    [HideInInspector]
+    public bool isHited = false;
+
+    // Xred Prefab
+    public GameObject Xred;
+    // Xred Instance
+    GameObject XredObj;
+
+    // XDisPlay Script
+    XDisPlay xDisPlay;
 
     // Use this for initialization
     void Start()
     {
         knifeRay = GameObject.Find("KnifeRay").GetComponent<KnifeRay>();
+
+        fallSound = this.GetComponent<AudioSource>().clip;
+
+        xDisPlay = GameObject.Find("UI/Score/Life").GetComponent<XDisPlay>();
     }
 
     // Update is called once per frame
@@ -32,10 +48,16 @@ public class HitByKnife : MonoBehaviour
             // 用射线判断是否被切，被切后将切点位置赋给刀光的位置
             if (Physics.Raycast(ray, out hit))
             {
-                isHited = true;
-                knifeRay.rayPosition = hit.transform.position;
+                if (hit.collider.name == this.gameObject.name)
+                {
+                    isHited = true;
+                    knifeRay.rayPosition = hit.transform.position;
+                    knifeRay.fruitSliced = this.gameObject;
+                }
             }
         }
+
+        PlaySound();
     }
 
     // 被切后飞出的水果
@@ -61,5 +83,27 @@ public class HitByKnife : MonoBehaviour
         Destroy(fruitSlicedObj2, 2f);
 
         DestroyImmediate(this.gameObject);
+    }
+
+    void PlaySound()
+    {
+        if (this.transform.position.y < -2 && this.gameObject.name != "hamster000(Clone)")
+        {
+            AudioSource.PlayClipAtPoint(fallSound, this.transform.position);
+
+            // display red X leftdown
+            XRed();
+
+            // life - 1
+            xDisPlay.life--;
+
+            DestroyImmediate(this.gameObject);
+        }
+    }
+
+    void XRed()
+    {
+        XredObj = Instantiate(Xred, this.transform.position, Quaternion.identity) as GameObject;
+        Destroy(XredObj, 1f);
     }
 }
