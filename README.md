@@ -9,6 +9,6 @@
 <br>
  3.个人习惯C#，且C#更符合Unity面向对象的思想，所以没有按照教程用JS。
 ## 安装
-将FruitSlice.unitypackage导入Unity工程中，然后在BuidSettings里根据关卡顺序把Scene添加进去。
+下载下来，在Unity里新建工程打开。
 ## Unity3D版本
 基于Unity3D 5.3。

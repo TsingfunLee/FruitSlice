@@ -7,12 +7,14 @@ public class CreateFruits : MonoBehaviour
 
     private GameObject fruitObj;
 
+    public float rate;
+
     // Use this for initialization
     void Start()
     {
         Physics.gravity = new Vector3(0, -20, 0);
 
-        InvokeRepeating("Create", 0, 3.0f);
+        InvokeRepeating("Create", 0, rate);
     }
 
     void Create()

@@ -53,6 +53,10 @@ public class HitByKnife : MonoBehaviour
                     isHited = true;
                     knifeRay.rayPosition = hit.transform.position;
                     knifeRay.fruitSliced = this.gameObject;
+                    //if (KnifeRay.isRay)
+                    //{
+                        //SliceFruit();
+                    //}
                 }
             }
         }

@@ -51,7 +51,7 @@ public class Score : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             int index = int.Parse(totalScoreString.Substring(i, 1));
-            GUI.DrawTexture(new Rect(100 + i * numImage[index].width, 80, numImage[index].width * scale, numImage[index].height * scale), numImage[index]);
+            GUI.DrawTexture(new Rect(75 + i * numImage[index].width*scale, 28, numImage[index].width * scale, numImage[index].height * scale), numImage[index]);
         }
     }
 

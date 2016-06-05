@@ -14,6 +14,9 @@ public class KnifeRay : MonoBehaviour
     // 刀光的实例
     private GameObject knifeRayObj;
 
+    // 刀光是否产生了，只有第一点第二点不重合时才能产生刀光
+    //public static bool isRay = false;
+
     // Slash prefab
     public GameObject slash;
     public GameObject slashH;
@@ -71,12 +74,22 @@ public class KnifeRay : MonoBehaviour
             {
                 angle = Mathf.PI / 2;
             }
+
+            float scale = 1;
+            // 计算刀光的缩放因子，使刀光的大小和鼠标在屏幕上划过的长度有关
+            scale = Mathf.Sqrt(Mathf.Abs((firstPosition.x - secondPosition.x) * (firstPosition.x - secondPosition.x) + (firstPosition.y - secondPosition.y) * (firstPosition.y - secondPosition.y))) / 2;
+
             // 当第一点和第二点不重合的时候
             if (secondPosition.x != firstPosition.x || firstPosition.y != secondPosition.y)
             {
                 rayPosition.z = -1;
                 // 创建刀光
                 knifeRayObj = Instantiate(knifeRay, rayPosition, Quaternion.AngleAxis(angle * 180 / Mathf.PI, Vector3.forward)) as GameObject;
+
+                knifeRayObj.transform.localScale = new Vector3(scale, scale / 2, 1);
+
+                // 产生了刀光
+                //isRay = true;
 
                 // 如果水果被切，创建被切的水果
                 if (fruitSliced != null)
@@ -127,6 +140,7 @@ public class KnifeRay : MonoBehaviour
 
                 // 一秒后销毁刀光
                 Destroy(knifeRayObj, 1.0f);
+                //isRay = false;
             }
         }
     }
